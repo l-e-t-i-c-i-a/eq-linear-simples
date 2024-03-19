@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jogo de Equação Linear</title>
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+    .campo {
+        width: 50px;
+        height: 50px;
+        margin: 5px;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div>
+        <input type="text" class="campo" id="campo1" placeholder="Campo 1">
+        <input type="text" class="campo" id="campo2" placeholder="Campo 2">
+        <input type="text" class="campo" id="campo3" placeholder="Campo 3">
+        <span class="campo">=</span>
+        <input type="text" class="campo" id="campo4" placeholder="Campo 4">
+    </div>
+    <button onclick="calcularX()">Calcular x</button>
+    <div id="equacao"></div>
+    <div id="resultado"></div>
+</div>
+
+<script>
+function calcularX() {
+    var campo1 = document.getElementById("campo1").value.trim();
+    var campo2 = document.getElementById("campo2").value.trim();
+    var campo3 = document.getElementById("campo3").value.trim();
+    var campo4 = document.getElementById("campo4").value.trim();
+
+    if (campo1 && campo2 && campo3 && campo4) {
+        // Verificar se 'x' está em mais de um campo
+        var camposComX = [campo1, campo2, campo3, campo4].filter(campo => campo === "x");
+        if (camposComX.length !== 1) {
+            document.getElementById("resultado").innerText = "Apenas um campo deve conter 'x'.";
+            return;
+        }
+
+        var valor1, valor2, operador, resultado;
+
+        // Encontrar onde 'x' está e definir os outros valores
+        if (campo1 === "x") {
+            valor1 = parseFloat(campo3);
+            operador = campo2;
+            valor2 = parseFloat(campo4);
+            resultado = calcularResultadoCampo1(operador, valor1, valor2);
+        } else if (campo2 != "/" && campo2 != "*" && campo2 != "+" && campo2 != "-") {
+            resultado = 'Inválido! O segundo campo é só para algum operador matemático [*,/,+,-]'
+            
+        } else if (campo3 === "x") {
+            valor1 = parseFloat(campo1);
+            operador = campo2;
+            valor2 = parseFloat(campo4);
+            resultado = calcularResultadoCampo3(operador, valor1, valor2);
+        } else if (campo4 === "x") {
+            valor1 = parseFloat(campo1);
+            operador = campo2;
+            valor2 = parseFloat(campo3);
+            resultado = calcularResultado(operador, valor1, valor2);
+        }
+
+        var equacao = campo1 + " " + campo2 + " " + campo3 + " = " + campo4;
+        document.getElementById("equacao").innerText = equacao;
+        document.getElementById("resultado").innerText = "x = " + resultado;
+    } else {
+        document.getElementById("resultado").innerText = "Preencha todos os campos.";
+    }
+}
+
+function calcularResultadoCampo1(operador, valor1, valor2) {
+    switch (operador) {
+        case "+":
+            return valor2 - valor1;
+        case "-":
+            return valor2 + valor1;
+        case "*":
+            return valor2 / valor1;
+        case "/":
+            return valor2 * valor1;
+        default:
+            return NaN;
+    }
+}
+
+function calcularResultadoCampo3(operador, valor1, valor2) {
+    switch (operador) {
+        case "+":
+            return valor2 - valor1;
+        case "-":
+            return valor1 - valor2;
+        case "*":
+            return valor1 * valor2;
+        case "/":
+            return valor1 / valor2;
+        default:
+            return NaN;
+    }
+}
+
+function calcularResultado(operador, valor1, valor2) {
+    switch (operador) {
+        case "+":
+            return valor1 + valor2;
+        case "-":
+            return valor1 - valor2;
+        case "*":
+            return valor2 * valor1;
+        case "/":
+            return valor1 / valor2;
+        default:
+            return NaN;
+    }
+}
+</script>
+
+</body>
+</html>
